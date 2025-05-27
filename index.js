@@ -25,6 +25,11 @@ app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
 
+//PRUEBA SERVIDOR FRONT END
+app.listen('http://localhost:4200',(res)=>{
+  res.send('Entregado')
+})
+
 
 db.serialize(() => {
   db.each("SELECT name FROM sqlite_master WHERE type='table'", (err, row) => {
