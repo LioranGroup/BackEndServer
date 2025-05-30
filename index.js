@@ -2,7 +2,7 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 const port = 3000;
-
+const db = require('./db')
 
 
 app.use(cors({
@@ -25,7 +25,7 @@ app.listen(port, () => {
 });
 
 //PRUEBA SERVIDOR FRONT END
-app.get('/api/ejemplo', (req, res) => {
+app.post('/test', (req, res) => {
   res.json({ mensaje: 'Hola desde el backend' });
 });
 
