@@ -1,15 +1,14 @@
-
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./DataBase/database.db', (err) => {
-  if (err) {
-    console.error('Error al conectar con la base de datos:', err.message);
-  } else {
-    console.log('Conectado a la base de datos SQLite.');
-  }
-});
+const cors = require('cors');
 const express = require('express');
 const app = express();
 const port = 3000;
+
+
+
+app.use(cors({
+  origin: 'http://localhost:4200'
+}));
+
 
 app.use(express.json());
 
@@ -26,9 +25,9 @@ app.listen(port, () => {
 });
 
 //PRUEBA SERVIDOR FRONT END
-app.listen('http://localhost:4200',(res)=>{
-  res.send('Entregado')
-})
+app.get('/api/ejemplo', (req, res) => {
+  res.json({ mensaje: 'Hola desde el backend' });
+});
 
 
 db.serialize(() => {
