@@ -24,6 +24,9 @@ app.listen(port, () => {
 const usersRoutes = require('./Routes/Users');
 app.use('/api/users', usersRoutes);
 
+const ordersRoutes = require('./Routes/orders');
+app.use('/api/orders',ordersRoutes);
+
 
 //***************************************PRUEBA SERVIDOR FRONT END
 app.post('/test', (req, res) => {
