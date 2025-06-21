@@ -3,12 +3,19 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const db = require('./db')
+const usersRoutes = require('./Routes/Users');
+const ordersRoutes = require('./Routes/orders');
+const Auth = require('./Models/auth');
+
+
+
+
+
 
 
 app.use(cors({
   origin: 'http://localhost:4200'
 }));
-
 
 app.use(express.json());
 
@@ -21,11 +28,11 @@ app.listen(port, () => {
 });
 
 
-const usersRoutes = require('./Routes/Users');
-app.use('/api/users', usersRoutes);
 
-const ordersRoutes = require('./Routes/orders');
-app.use('/api/orders',ordersRoutes);
+app.use('/api/users',Auth, usersRoutes);
+
+
+app.use('/api/orders',Auth, ordersRoutes);
 
 
 //***************************************PRUEBA SERVIDOR FRONT END
