@@ -2,15 +2,31 @@
 const express = require('express');
 const router = express.Router();
 const orders = require('../Models/orders');
-const users = require('../Models/Users');
+
+
+router.post('/new', (req, res)=>
+    {
+        
+        const {Item, Qty, Date, Order, Table} = req.body;
+
+        if (!Item | !Qty | !Date | !Order | !Table)
+        {
+            return res.status(400).json({error: "Te faltan valores para continuar"})
+        }
+         
+    
+
+        orders.newOrder(Item, Qty, Date, (err,data)=>
+            {
+                if (err) return res.status(500).json({error: err.message})
+                res.status(201).json({data})
+            });
+            
+    });
+
 
 
 router.get('/all', (req, res)=>{
-    //const {order} = req.query;
-    
-    /* if (!order){
-        return res.status(400).json({error: "No tienes lo necesario para esta consulta"})
-    }; */
 
     orders.getAll((err, data) => {
     if (err) return res.status(500).json({ error: err.message });

@@ -2,9 +2,10 @@ const cors = require('cors');
 const express = require('express');
 const app = express();
 const port = 3000;
-const db = require('./db')
+const db = require('./db');
 const usersRoutes = require('./Routes/Users');
 const ordersRoutes = require('./Routes/orders');
+const inputsRoutes = require('./Routes/inputs');
 const Auth = require('./Models/auth');
 
 
@@ -33,6 +34,9 @@ app.use('/api/users',Auth, usersRoutes);
 
 
 app.use('/api/orders',Auth, ordersRoutes);
+
+app.use('/api/inputs', Auth, inputsRoutes);
+
 
 
 //***************************************PRUEBA SERVIDOR FRONT END
