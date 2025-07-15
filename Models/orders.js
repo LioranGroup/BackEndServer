@@ -15,30 +15,30 @@ const orders =
         if (err) return callback(err);
         if (row) 
           {
-            callback(null, row); // Usuario encontrado
+            callback(null, row); 
           } else 
             {
-              callback(null, "The order doesn't exist"); // Usuario no encontrado
+              callback(null, "The order doesn't exist"); 
             }
         });},
 
   newOrder(Item,Qty,Date,Table,Order, callback){
 
-    const findOrder = `Select order_id FROM orders_items WHERE order_id = ?`;
-    const crearOrden = `INSERT INTO orders (order_date, order_status) VALUES (?, 'open')`;
-    const findTable = `Select order_id FROM orders_items WHERE table_id = ?`;
+    
+    const crearOrden = `INSERT INTO orders (order_date, order_status, table_id) VALUES (?, 'open',?)`;
+    
 
-    db.run(crearOrden, [Date], function (err)
+    db.run(crearOrden, [Date, Table], function (err)
     {
       if (err) return callback(err);
       const newOrderId = this.lastID;
       const query = `
-                  INSERT INTO orders_items (order_id, dish_id, quantity, price_at_sale)
-                  SELECT ?,m.dish_id, ?, m.unit_price * ? 
+                  INSERT INTO orders_items (order_id, dish_id, quantity, price_at_sale, table_id)
+                  SELECT ?,m.dish_id, ?, m.unit_price * ?, ?
                   FROM menu m
                   WHERE m.dish_name = ?;
       `;
-      db.run(query,[newOrderId,Qty,Qty,Item], function (err)
+      db.run(query,[newOrderId,Qty,Qty,Table,Item], function (err)
       {
         if (err) 
         {
@@ -48,7 +48,24 @@ const orders =
 
         callback(null,{ success: true, message: 'La orden ha sido creada satisfactoriamente', orderId: newOrderId });
       });
-    });}
+    });},
+
+
+  newItem(Item, Qty, Date, Order, Table, callback){
+    const findOrder = `Select order_id, table_id, dish_id FROM orders_items WHERE order_id = ? and table_id = ?`;
+
+    db.get(findOrder, [Order, Table], function (err, row)
+    {
+      console.log(findOrder, [Order, Table]);
+      if (err) return callback(err);
+      if (!row){
+        return callback({ error: true, message: "No se encontró ningún registro." });
+      }else{
+        callback(null,{ success: true, message: 'esta es la orden', row });
+      }
+      
+    })
+  }
 }
 
 

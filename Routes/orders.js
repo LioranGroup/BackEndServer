@@ -16,7 +16,28 @@ router.post('/new', (req, res)=>
          
     
 
-        orders.newOrder(Item, Qty, Date, (err,data)=>
+        orders.newOrder(Item, Qty, Date, Order, Table, (err,data)=>
+            {
+                if (err) return res.status(500).json({error: err.message})
+                res.status(201).json({data})
+            });
+            
+    });
+
+
+router.post('/newItem', (req, res)=>
+    {
+        
+        const {Item, Qty, Date, Order, Table} = req.body;
+
+        if (!Item | !Qty | !Date | !Order | !Table)
+        {
+            return res.status(400).json({error: "Te faltan valores para continuar"})
+        }
+         
+    
+
+        orders.newItem(Item, Qty, Date, Order, Table, (err,data)=>
             {
                 if (err) return res.status(500).json({error: err.message})
                 res.status(201).json({data})
