@@ -56,14 +56,21 @@ const orders =
       FROM view_order_history
       WHERE order_id = ? AND table_id = ?;`;
 
+    // const addItem = `
+    //   INSERT INTO orders_items (order_id, dish_id, quantity, price_at_sale, table_id)
+    //   SELECT ?, m.dish_id, ?, m.unit_price * ?, ?
+    //   FROM menu m
+    //   WHERE m.dish_name = ?;
+    // `;  
+
     db.get(findOrder, [Order, Table], function (err, row)
     {
-      console.log(findOrder, [Order, Table]);
+      // console.log(row.order_status);
       if (err) return callback(err);
-      if (!row){
-        return callback({ error: true, message: "No se encontró ningún registro." });
+      if (!row  || row.order_status === 'closed' ){
+         callback(null,{  message: "No se encontró ningún registro o la orden ya esta cerrada" });
       }else{
-        callback(null,{ success: true, message: 'esta es la orden', row });
+        callback(null,{ message: 'esta es la orden', row });
       }
       
     })

@@ -37,10 +37,13 @@ router.post('/newItem', (req, res)=>
          
     
 
-        orders.newItem(Item, Qty, Date, Order, Table, (err,data)=>
+        orders.newItem(Item, Qty, Date, Order, Table, (err,response)=>
             {
                 if (err) return res.status(500).json({error: err.message})
-                res.status(201).json({data})
+                if (response.message === "No se encontró ningún registro o la orden ya esta cerrada") {
+                    return res.status(200).json({ message: response.message });
+                }
+                res.status(201).json({response})
             });
             
     });
