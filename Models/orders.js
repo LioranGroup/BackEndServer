@@ -52,7 +52,9 @@ const orders =
 
 
   newItem(Item, Qty, Date, Order, Table, callback){
-    const findOrder = `Select order_id, table_id, dish_id FROM orders_items WHERE order_id = ? and table_id = ?`;
+    const findOrder = `SELECT *
+      FROM view_order_history
+      WHERE order_id = ? AND table_id = ?;`;
 
     db.get(findOrder, [Order, Table], function (err, row)
     {
