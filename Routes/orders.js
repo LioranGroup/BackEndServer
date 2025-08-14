@@ -71,4 +71,16 @@ router.get('/specific', (req, res)=> {
     res.json(data);
     });
 })
+
+router.post('/close', (req, res)=>
+    {
+        const {id} = req.query;
+            if (!id){
+                return res.status(400).json({error: "No tienes lo necesario para esta consulta"})
+            };
+        orders.closeOrder(id, (err,data)=>{
+            if (err) return res.status(500).json({ error: err.message });
+            res.json(data);
+        });
+    });
 module.exports = router;

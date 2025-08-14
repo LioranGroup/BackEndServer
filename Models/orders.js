@@ -56,12 +56,12 @@ const orders =
       FROM view_order_history
       WHERE order_id = ? AND table_id = ?;`;
 
-    // const addItem = `
-    //   INSERT INTO orders_items (order_id, dish_id, quantity, price_at_sale, table_id)
-    //   SELECT ?, m.dish_id, ?, m.unit_price * ?, ?
-    //   FROM menu m
-    //   WHERE m.dish_name = ?;
-    // `;  
+    const addItem = `
+      INSERT INTO orders_items (order_id, dish_id, quantity, price_at_sale, table_id)
+      SELECT ?, m.dish_id, ?, m.unit_price * ?, ?
+      FROM menu m
+      WHERE m.dish_name = ?;
+    `;  
 
     db.get(findOrder, [Order, Table], function (err, row)
     {
@@ -70,9 +70,52 @@ const orders =
       if (!row  || row.order_status === 'closed' ){
          callback(null,{  message: "No se encontró ningún registro o la orden ya esta cerrada" });
       }else{
-        callback(null,{ message: 'esta es la orden', row });
-      }
-      
+        // callback(null,{ message: 'esta es la orden', row });
+        const newOrderId = this.lastID;
+        db.run(addItem,[Order,Qty,Qty,Table,Item], function (err)
+      {
+        if (err) 
+        {
+          console.error(err);
+          return callback({ err});
+        }
+
+        callback(null,{ success: true, message: 'La orden ha sido agregada satisfactoriamente', orderId: newOrderId });
+      });}
+
+    })
+  },
+  closeOrder(Order, callback){
+    const findOrder = `SELECT *
+      FROM orders
+      WHERE order_id = ?;`;
+
+    const close = `
+      UPDATE orders
+      SET order_status = 'closed'
+      WHERE order_id = ?;
+    `;  
+
+    db.get(findOrder, [Order], function (err, row)
+    {
+      // console.log(row.order_status);
+      if (err) return callback(err);
+      if (!row  || row.order_status === 'closed' ){
+         callback(null,{  message: "No se encontró ningún registro o la orden ya esta cerrada" });
+      }else{
+        // callback(null,{ message: 'esta es la orden', row });
+        
+        db.run(close,[Order], function (err)
+      {
+        if (err) 
+        {
+          console.error(err);
+          return callback({ err});
+        }
+
+        callback(null,{ success: true, message: 'La orden ha sido cerrada satisfactoriamente' });
+      });}
+
     })
   }
 }
