@@ -32,7 +32,6 @@ app.listen(port, () => {
 
 app.use('/api/users',Auth, usersRoutes);
 
-
 app.use('/api/orders',Auth, ordersRoutes);
 
 app.use('/api/inputs', Auth, inputsRoutes);
