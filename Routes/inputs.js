@@ -21,7 +21,18 @@ router.get('/specific', (req, res)=> {
         if (err) return res.status(500).json({ error: err.message });
     res.json(data);
     });
-})
+});
+
+router.delete('/delete', (req, res) => {
+    const { id } = req.query;
+    if (!id) {
+        return res.status(400).json({ error: "No tienes lo necesario para esta consulta" });
+    }
+    inputs.deleteById(id, (err, response) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(response);
+    });
+});
 
 router.post('/newInput', (req, res) => {
     const { Item, Qty, meassure, min } = req.body;
@@ -30,7 +41,7 @@ router.post('/newInput', (req, res) => {
         return res.status(400).json({ error: "Te faltan valores para continuar" });
     }
 
-    inputs.newInput(Item, Qty, meassure, min, (err, response) => {
+    inputs.newInput(Item.toLowerCase().trim(), Qty, meassure, min, (err, response) => {
         if (err) return res.status(500).json({ error: err.message });
         res.status(201).json(response);
     });
