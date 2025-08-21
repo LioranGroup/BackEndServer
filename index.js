@@ -7,6 +7,7 @@ const usersRoutes = require('./Routes/Users');
 const ordersRoutes = require('./Routes/orders');
 const inputsRoutes = require('./Routes/inputs');
 const Auth = require('./Models/auth');
+const menuRoutes = require('./Routes/menu');
 
 
 
@@ -35,6 +36,8 @@ app.use('/api/users',Auth, usersRoutes);
 app.use('/api/orders',Auth, ordersRoutes);
 
 app.use('/api/inputs', Auth, inputsRoutes);
+
+app.use('/api/menu', Auth, menuRoutes);
 
 
 
